@@ -38,14 +38,14 @@ class ConvenientBaseMixIn(object):
 class TeamHoldingMixIn(object):
     @property
     def team(self):
-        return self.request_params.get('team')
+        return self.report_request.params.get('team')
     
 class ReportReferenceMixIn(object):
     # allow a report to reference another report
     
     @property
     def next_report_slug(self):
-        return self.request_params.get("next_report")
+        return self.report_request.params.get("next_report")
     
     @property
     def next_report_class(self):
@@ -57,7 +57,7 @@ class GroupReferenceMixIn(object):
     
     @property
     def group_id(self):
-        return self.request_params["group"]
+        return self.report_request.params["group"]
     
     @property
     @memoized
@@ -106,7 +106,7 @@ class MockNavReport(MockSummaryReport):
             url = report_cls.get_url(self.domain, 
                                      render_as=self.render_next)
             if self.preserve_url_params:
-                url = url_and_params(url, self.request_params)
+                url = url_and_params(url, self.report_request.params)
             return format_html('<a href="{details}">{val}</a>',
                                 val=report_cls.name, 
                                 details=url)
@@ -145,7 +145,7 @@ class SubCenterSelectionReport(ConvenientBaseMixIn, GenericTabularReport,
     def _row(self, group, rank):
         
         def _link(g):
-            params = copy(self.request_params)
+            params = copy(self.report_request.params)
             params["group"] = g.get_id
             return format_html('<a href="{details}">{group}</a>',
                 group=g.name,

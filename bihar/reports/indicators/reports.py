@@ -20,7 +20,7 @@ class IndicatorSetMixIn(object):
     
     @property
     def indicator_set_slug(self):
-        return self.request_params.get("indicators")
+        return self.report_request.params.get("indicators")
     
     @property
     def indicator_set(self):
@@ -30,11 +30,11 @@ class IndicatorMixIn(IndicatorSetMixIn):
     
     @property
     def type_slug(self):
-        return self.request_params.get("indicator_type")
+        return self.report_request.params.get("indicator_type")
 
     @property
     def indicator_slug(self):
-        return self.request_params.get("indicator")
+        return self.report_request.params.get("indicator")
 
     @property
     def indicator(self):
@@ -63,7 +63,7 @@ class IndicatorSelectNav(MockSummaryReport, IndicatorConfigMixIn):
     @property
     def data(self):
         def _nav_link(indicator_set):
-            params = copy(self.request_params)
+            params = copy(self.report_request.params)
             params["indicators"] = indicator_set.slug
             params["next_report"] = IndicatorNav.slug
             return format_html('<a href="{next}">{val}</a>',
@@ -113,7 +113,7 @@ class IndicatorClientSelectNav(MockSummaryReport, IndicatorSetMixIn):
     @property
     def data(self):
         def _nav_link(indicator):
-            params = copy(self.request_params)
+            params = copy(self.report_request.params)
             params["indicators"] = self.indicator_set.slug
             params["indicator"] = indicator.slug
             params["indicator_type"] = self._indicator_type
